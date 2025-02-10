@@ -10,6 +10,9 @@
 // what makes it such an awesome testing tool,
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
+// import { First } from "../../support/PageObjs/First"
+
+// const first = new First()
 
 describe('example to-do app', () => {
   beforeEach(() => {
@@ -17,7 +20,24 @@ describe('example to-do app', () => {
     // so we must tell it to visit our website with the `cy.visit()` command.
     // Since we want to visit the same URL at the start of all our tests,
     // we include it in our beforeEach function so that it runs before each test
-    cy.visit('/todo')
+    cy.visit('https://example.cypress.io/todo')
+  })
+
+  it('testich', () => {
+    cy.get('.header').click()
+    cy.get('.header').should('be.visible')
+    cy.get('h1').contains('todos')
+    cy.get('[data-test="new-todo"]').type('123')
+    cy.get('.main > ul > li').eq(0).should('contain', 'Pay electric bill')
+  
+    cy.get('.todoapp').find('header').should('be.visible')
+    cy.get('ul > li').closest('.main')
+    cy.get('.header').dblclick()
+
+    const user = {name: 'test'}
+    cy.wrap(user).should('have.a.property', 'name', 'test')
+
+    cy.get('li').filter(':visible').should('have.length', 9)
   })
 
   it('displays two todo items by default', () => {
