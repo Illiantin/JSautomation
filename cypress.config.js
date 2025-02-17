@@ -5,6 +5,6 @@ module.exports = defineConfig({
   downloadsFolder: "cypress/downloads",
   fixturesFolder: "cypress/fixtures",
   e2e: {
-    baseUrl: 'https://example.cypress.io/todo'
+    baseUrl: 'https://milla.stage.hesh.app'
   },
 });
