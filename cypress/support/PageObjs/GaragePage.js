@@ -4,6 +4,8 @@ class GaragePage {
       }
     
     addCar(brand, model, mileage) {
+        cy.intercept("POST", "/api/cars").as("createCar")
+        
         cy.get("button").contains("Add car").click()
         cy.get("select[id='addCarBrand']").select(brand)
         cy.get("select[id='addCarModel']").select(model)
@@ -19,6 +21,12 @@ class GaragePage {
         cy.contains("div", carName).closest(".car-item").within(() => {
             cy.contains("Add fuel expense").click()
         });
+
+    cy.wait("@createCar").then(({ response }) => {
+        expect(response.statusCode).to.eq(200);
+        const carId = response.body.data.id;
+        cy.wrap(carId).as("createdCarId");
+        })
     }
-  }
-  export default new GaragePage()
+}
+export default new GaragePage()
