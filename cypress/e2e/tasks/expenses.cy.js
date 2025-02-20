@@ -18,3 +18,22 @@ describe("Fuel Expenses Tests", () => {
         ExpensesPage.addExpense("50", "2025-02-17")
     })
 })
+
+describe("API expense test", () => {
+    it("should create an expense via API and validate response", function () {
+        cy.get("@createdCarId").then((carId) => {
+            cy.createExpense(carId, 111, 11, 11)
+        })
+    })
+
+    it("should find car via UI and validate created expense", function () {
+        cy.get("@createdCarId").then((carId) => {
+
+            cy.get(`div[data-car-id="${carId}"]`).within(() => {
+                cy.contains("div", "50").should("exist")
+                cy.contains("div", "11 L").should("exist")
+                cy.get("input[name='miles']").should("have.value", "111")
+            })
+        })
+    })
+})

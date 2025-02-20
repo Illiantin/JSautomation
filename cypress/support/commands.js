@@ -46,3 +46,35 @@ Cypress.Commands.overwrite('type', (originalFn, element, text, options) => {
   
     return originalFn(element, text, options);
   })
+
+  Cypress.Commands.add("getCars", () => {
+    cy.request({
+        method: "GET",
+        url: "/api/cars",
+    }).then((response) => {
+        expect(response.status).to.eq(200)
+        return response.body.data
+    })
+})
+
+Cypress.Commands.add("createExpense", (carId, mileage, liters, totalCost, reportedAt = new Date().toISOString().split("T")[0]) => {
+  cy.request({
+      method: "POST",
+      url: "/api/expenses",
+      body: {
+          "carId": carId,
+          "reportedAt": reportedAt,
+          "mileage": mileage,
+          "liters": liters,
+          "totalCost": totalCost,
+          "forceMileage": false
+      },
+  }).then((response) => {
+      expect(response.status).to.eq(200)
+      expect(response.body.data.liters).to.eq(liters)
+      expect(response.body.data.mileage).to.eq(mileage)
+      expect(response.body.data.totalCost).to.eq(totalCost)
+      expect(response.body.data.carId).to.eq(carId)
+      expect(response.body.data.reportedAt).to.eq(reportedAt)
+      cy.wrap(response.body.data.id).as("createdExpenseId")  })
+})

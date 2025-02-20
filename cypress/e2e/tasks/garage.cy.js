@@ -30,3 +30,16 @@ describe("Garage Tests", () => {
           .should('be.disabled')
     })
 })
+
+describe ('API tests', () => {
+    it("should validate created car exists via API", function () {
+        cy.getCars().then((cars) => {
+            cy.get("@createdCarId").then((carId) => {
+                const createdCar = cars.find((car) => car.id === carId)
+                expect(createdCar).to.not.be.undefined;
+                expect(createdCar.brand).to.eq("Audi")
+                expect(createdCar.model).to.eq("R8")
+            })
+        })
+    })
+})
